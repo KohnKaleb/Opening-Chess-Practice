@@ -1,5 +1,3 @@
-import {AbChess} from ".AbChess-0.3.0"
-
 var abChess = {};
         var options = {
             animated: false
@@ -7,3 +5,7 @@ var abChess = {};
         
 abChess = new AbChess("chessboard", options);
 abChess.setFEN();
+
+document.getElementById("newGame").onclick = function newGame() {
+    abChess.reset();
+}
