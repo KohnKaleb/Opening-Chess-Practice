@@ -9,3 +9,7 @@ abChess.setFEN();
 document.getElementById("newGame").onclick = function newGame() {
     abChess.reset();
 }
+
+document.getElemenyById("flipBoard").onclick = function flipBoard() {
+    abChess.flip();
+}

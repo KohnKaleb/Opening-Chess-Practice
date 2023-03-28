@@ -10,6 +10,23 @@
 
 </head>
 <body>
-    <button id="newGame">New Game</button>
+    <button id="newGame">Reset</button>
+    <button id="flipBoard">Flip Board</button>
     <div id="chessboard"></div>
+
+    <label for="opening">Select Opening</label>
+    <select name="opening" id="opening">
+        <option value="none" selected disabled hidden></option>
+        <optgroup label="Vienna">
+            <option value="copyCat">Copy Cat</option>
+            <option value="viennaGambit">Vienna Gambit</option>
+        </optgroup>
+        <optgroup label="Caro-Kann">
+            <option value="exchangeVariation">Exchange Variation</option>
+            <option value="advanceVariation">Advance Variation</option>
+        </optgroup>
+    </select>
+    <button id="start">Start</button>
+    <button id="hint">Hint</button>
+
 </body>
