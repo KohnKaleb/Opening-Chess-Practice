@@ -1,12 +1,16 @@
 // moves for computer to play in format of [from, to]
-var copyCatMovesWhite = [['e2','e4'], ['Nb1','Nc3'], ['Bf1','Bc4'], ['Qd1','Qg4']];
+var copyCatMovesWhite = [['e2','e4'], ['b1','Nc3'], ['Bf1','Bc4'], ['Qd1','Qg4']];
 var copyCatMovesBlack = [['e7', 'e5'],['Nb8', 'Nc6'], ['Bf8','Bc5']];
-var viennaGamitMovesWhite = [['e2','e4'], ['Nb1','Nc3'], ['f2','f4'],['f4','fxe5'],['Ng1','Nf3']];
-var viennaGamitMovesBlack = [['e7','e5'], ['Ng8','Nf6'], ['d7','d5'], ['Nf6','Nxe4']];
+var viennaGamitMovesWhite = [['e2','e4'], ['Nb1','Nc3'], ['f2','f4'],['f4','e5'],['Ng1','Nf3']];
+var viennaGamitMovesBlack = [['e7','e5'], ['Ng8','Nf6'], ['d7','d5'], ['Nf6','e4']];
 var advanceCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','e5'], ['Ng1','Nf3']];
 var advanceCaroKannMovesBlack = [['c7','c6'], ['d7','d5'], ['Bc8','Bf5'], ['e7','e6']];
-var exchangeCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','exd5'], ['Bf1','Bd3'], ['c2','c3']];
-var exchangeCaroKannMovesBlack = [['c7','c6'], ['d7','d5'],  ['c6','cxd5'],  ['Nb8','Nc6'], ['Ng8','Nf6']];
+var exchangeCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','d5'], ['Bf1','Bd3'], ['c2','c3']];
+var exchangeCaroKannMovesBlack = [['c7','c6'], ['d7','d5'],  ['c6','d5'],  ['Nb8','Nc6'], ['Ng8','Nf6']];
+var moves = [];
+var fenList = [];
+var playingWhite = true;
+var moveCount = 0;
 
 // fen to check if user correctly played next move
 var copyCatFenWhite = ['rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
@@ -52,8 +56,6 @@ var exchangeCaroKannFenBlack = ['rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR
     'r1bqkb1r/pp2pppp/2n2n2/3p4/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 1 6'
 ];
 
-var playingWhite = true;
-
 var abChess = {};
 
 var options = {
@@ -68,6 +70,9 @@ abChess.setFEN();
 document.getElementById("newGame").onclick = function newGame() {
     abChess.reset();
     abChess.setFEN();
+    moves = [];
+    fenList = [];
+    moveCount = 0;
 }
 
 // flip the board
@@ -85,15 +90,14 @@ document.getElementById("start").onclick = function start() {
         return;
     }
 
-    let moves = setMoves(opening);
-    let fen = setFen(opening)
+    moves = setMoves(opening);
+    fenList = setFen(opening);
 
-    if (playingWhite) {
-        
-    } else {
-
+    if (!playingWhite) {
+        abChess.play(moves[0][0], moves[0][1]);
+        ++moveCount;
+        moves.shift();
     }
- 
 }
 
 // give hint to next move
@@ -143,32 +147,57 @@ function setMoves(opening) {
     switch (opening) {
         case "copyCat":
             if (playingWhite) {
-                moves = copyCatMovesWhite;
-            } else {
                 moves = copyCatMovesBlack;
+            } else {
+                moves = copyCatMovesWhite;
             }
             break;
         case "viennaGamit":
             if (playingWhite) {
-                moves = viennaGamitMovesWhite;
-            } else {
                 moves = viennaGamitMovesBlack;
+            } else {
+                moves = viennaGamitMovesWhite;
             }
             break;
         case "advanceCaroKann":
             if (playingWhite) {
-                moves = advanceCaroKannMovesWhite;
-            } else {
                 moves = advanceCaroKannMovesBlack;
+            } else {
+                moves = advanceCaroKannMovesWhite;
             }
             break;
         case "exchangeCaroKann":
             if (playingWhite) {
-                moves = exchangeCaroKannMovesWhite;
-            } else {
                 moves = exchangeCaroKannMovesBlack;
+            } else {
+                moves = exchangeCaroKannMovesWhite;
             }
             break;
     }
     return moves;
 }
+
+function checkFEN(fenList) { 
+    let fen = abChess.getFEN(moveCount);
+    if (fen == fenList[0]) {
+        return true;
+    }
+    return false;
+}
+
+function nextStep() {
+    ++moveCount;
+    let currentFen = abChess.getFEN(moveCount);
+    if (currentFen == fenList[0]) {
+        abChess.play(moves[0][0], moves[0][1]);
+        ++moveCount;
+        moves.shift();
+        fenList.shift();
+        return;
+    } else {
+        alert("Wrong move! Try again.");
+        abChess.setFEN(pastFEN);
+    }
+}
+
+abChess.onMovePlayed(nextStep);
