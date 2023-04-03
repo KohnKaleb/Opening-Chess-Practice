@@ -8,12 +8,13 @@ var advanceCaroKannMovesBlack = [['c7','c6'], ['d7','d5'], ['c8','f5'], ['e7','e
 var exchangeCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','d5'], ['f1','d3'], ['c2','c3']];
 var exchangeCaroKannMovesBlack = [['c7','c6'], ['d7','d5'],  ['c6','d5'],  ['b8','c6'], ['g8','f6']];
 var moves = [];
+var movesForHint = [];
 var hasGameStarted = false;
 var fenList = [];
 var playingWhite = true;
 // nessesary for getFEN method to work
 var moveCount = 0;
-var computer_move = false
+var computerMove = false
 
 // fen to check if user correctly played next move
 var copyCatFenWhite = ['rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
@@ -71,18 +72,22 @@ abChess.setFEN();
 
 // reset pieces on the board
 document.getElementById("newGame").onclick = function newGame() {
-    abChess.reset();
     abChess.setFEN();
+    abChess.reset();
     moves = [];
     fenList = [];
     moveCount = 0;
+    hasGameStarted = false;
+    playingWhite = true;
+    computerMove = false;
+    movesForHint = [];
 }
 
 // flip the board
 document.getElementById("flipBoard").onclick = function flipBoard() {
     abChess.flip();
     playingWhite = !playingWhite;
-    computer_move = !computer_move;
+    computerMove = !computerMove;
 }
 
 // start the game
@@ -96,10 +101,11 @@ document.getElementById("start").onclick = function start() {
     }
 
     moves = setMoves(opening);
+    movesForHint = setMovesForHint(opening);
     fenList = setFen(opening);
 
     if (!playingWhite) {
-        computer_move = true;
+        computerMove = true;
         abChess.play(moves[0][0], moves[0][1]);
         ++moveCount;
         moves.shift();
@@ -108,10 +114,12 @@ document.getElementById("start").onclick = function start() {
 
 // give hint to next move
 document.getElementById("hint").onclick = function hint() {
-
+    alert("One of your pieces needs to go to the " + movesForHint[0][1] + " square");
 }
 
-// set the fen list for selected opening
+/**
+ * set the fen list for selected opening
+ */
 function setFen(opening) {
     let fen = [];
     switch (opening) {
@@ -147,7 +155,54 @@ function setFen(opening) {
     return fen;
 }
 
-// set the moves for the selected opening
+/**
+ * sets moves for opening based on users input
+ * 
+ * @param {*} opening opening user selected to play
+ * @returns a list of opening moves for the selected opening
+ */
+function setMovesForHint(opening) {
+    let movesCopy = [];
+    switch (opening) {
+        case "copyCat":
+            if (playingWhite) {
+                movesCopy = copyCatMovesWhite;
+            } else {
+                movesCopy = copyCatMovesBlack;
+            }
+            break;
+        case "viennaGamit":
+            if (playingWhite) {
+                movesCopy = viennaGamitMovesWhite;
+            } else {
+                movesCopy = viennaGamitMovesBlack;
+            }
+            break;
+        case "advanceCaroKann":
+            if (playingWhite) {
+                movesCopy = advanceCaroKannMovesWhite;
+            } else {
+                movesCopy = advanceCaroKannMovesBlack;
+            }
+            break;
+        case "exchangeCaroKann":
+            if (playingWhite) {
+                movesCopy = exchangeCaroKannMovesWhite;
+            } else {
+                movesCopy = exchangeCaroKannMovesBlack;
+            }
+            break;
+    }
+    return movesCopy;
+}
+
+
+/**
+ * sets the moves for the selected opening
+ * 
+ * @param {*} opening user selected to play
+ * @returns a list of opening moves for the selected opening
+ */
 function setMoves(opening) {
     let movesCopy = [];
     switch (opening) {
@@ -191,14 +246,20 @@ function checkFEN(fenList) {
     return false;
 }
 
+/**
+ * sets the next moves for computer or user
+ * 
+ * @returns void
+ */
 function nextStep() {
     // check if game has started
     if (!hasGameStarted) { 
         alert("please start the game before moving");
+        return;
     }
     // does't need to check move if it's computers turn
-    if (computer_move) {
-        computer_move = false;
+    if (computerMove) {
+        computerMove = false;
         return;
     }
     
@@ -206,7 +267,7 @@ function nextStep() {
     let currentFen = abChess.getFEN(moveCount);
     // check that user made the correct move
     if (currentFen == fenList[0]) {
-        computer_move = true;
+        computerMove = true;
         if (moves.length == 0) {
             alert("You won!");
             return;
@@ -216,6 +277,7 @@ function nextStep() {
         ++moveCount;
         moves.shift();
         fenList.shift();
+        movesForHint.shift();
         if (fenList.length == 0) {
             alert("You won!");
             return;
