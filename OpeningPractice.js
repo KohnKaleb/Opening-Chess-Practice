@@ -1,16 +1,19 @@
 // moves for computer to play in format of [from, to]
-var copyCatMovesWhite = [['e2','e4'], ['b1','Nc3'], ['Bf1','Bc4'], ['Qd1','Qg4']];
-var copyCatMovesBlack = [['e7', 'e5'],['Nb8', 'Nc6'], ['Bf8','Bc5']];
-var viennaGamitMovesWhite = [['e2','e4'], ['Nb1','Nc3'], ['f2','f4'],['f4','e5'],['Ng1','Nf3']];
-var viennaGamitMovesBlack = [['e7','e5'], ['Ng8','Nf6'], ['d7','d5'], ['Nf6','e4']];
-var advanceCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','e5'], ['Ng1','Nf3']];
-var advanceCaroKannMovesBlack = [['c7','c6'], ['d7','d5'], ['Bc8','Bf5'], ['e7','e6']];
-var exchangeCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','d5'], ['Bf1','Bd3'], ['c2','c3']];
-var exchangeCaroKannMovesBlack = [['c7','c6'], ['d7','d5'],  ['c6','d5'],  ['Nb8','Nc6'], ['Ng8','Nf6']];
+var copyCatMovesWhite = [['e2','e4'], ['b1','c3'], ['f1','c4'], ['d1','g4']];
+var copyCatMovesBlack = [['e7', 'e5'],['b8', 'c6'], ['f8','c5']];
+var viennaGamitMovesWhite = [['e2','e4'], ['b1','c3'], ['f2','f4'],['f4','e5'],['g1','f3']];
+var viennaGamitMovesBlack = [['e7','e5'], ['g8','f6'], ['d7','d5'], ['f6','e4']];
+var advanceCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','e5'], ['g1','f3']];
+var advanceCaroKannMovesBlack = [['c7','c6'], ['d7','d5'], ['c8','f5'], ['e7','e6']];
+var exchangeCaroKannMovesWhite = [['e2','e4'], ['d2','d4'], ['e4','d5'], ['f1','d3'], ['c2','c3']];
+var exchangeCaroKannMovesBlack = [['c7','c6'], ['d7','d5'],  ['c6','d5'],  ['b8','c6'], ['g8','f6']];
 var moves = [];
+var hasGameStarted = false;
 var fenList = [];
 var playingWhite = true;
+// nessesary for getFEN method to work
 var moveCount = 0;
+var computer_move = false
 
 // fen to check if user correctly played next move
 var copyCatFenWhite = ['rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
@@ -79,11 +82,13 @@ document.getElementById("newGame").onclick = function newGame() {
 document.getElementById("flipBoard").onclick = function flipBoard() {
     abChess.flip();
     playingWhite = !playingWhite;
+    computer_move = !computer_move;
 }
 
 // start the game
 document.getElementById("start").onclick = function start() {
     let opening = document.getElementById("opening").value;
+    hasGameStarted = true;
 
     if (opening == "none") {
         alert("Please select an opening");
@@ -94,6 +99,7 @@ document.getElementById("start").onclick = function start() {
     fenList = setFen(opening);
 
     if (!playingWhite) {
+        computer_move = true;
         abChess.play(moves[0][0], moves[0][1]);
         ++moveCount;
         moves.shift();
@@ -143,38 +149,38 @@ function setFen(opening) {
 
 // set the moves for the selected opening
 function setMoves(opening) {
-    let moves = [];
+    let movesCopy = [];
     switch (opening) {
         case "copyCat":
             if (playingWhite) {
-                moves = copyCatMovesBlack;
+                movesCopy = copyCatMovesBlack;
             } else {
-                moves = copyCatMovesWhite;
+                movesCopy = copyCatMovesWhite;
             }
             break;
         case "viennaGamit":
             if (playingWhite) {
-                moves = viennaGamitMovesBlack;
+                movesCopy = viennaGamitMovesBlack;
             } else {
-                moves = viennaGamitMovesWhite;
+                movesCopy = viennaGamitMovesWhite;
             }
             break;
         case "advanceCaroKann":
             if (playingWhite) {
-                moves = advanceCaroKannMovesBlack;
+                movesCopy = advanceCaroKannMovesBlack;
             } else {
-                moves = advanceCaroKannMovesWhite;
+                movesCopy = advanceCaroKannMovesWhite;
             }
             break;
         case "exchangeCaroKann":
             if (playingWhite) {
-                moves = exchangeCaroKannMovesBlack;
+                movesCopy = exchangeCaroKannMovesBlack;
             } else {
-                moves = exchangeCaroKannMovesWhite;
+                movesCopy = exchangeCaroKannMovesWhite;
             }
             break;
     }
-    return moves;
+    return movesCopy;
 }
 
 function checkFEN(fenList) { 
@@ -186,13 +192,34 @@ function checkFEN(fenList) {
 }
 
 function nextStep() {
+    // check if game has started
+    if (!hasGameStarted) { 
+        alert("please start the game before moving");
+    }
+    // does't need to check move if it's computers turn
+    if (computer_move) {
+        computer_move = false;
+        return;
+    }
+    
     ++moveCount;
     let currentFen = abChess.getFEN(moveCount);
+    // check that user made the correct move
     if (currentFen == fenList[0]) {
+        computer_move = true;
+        if (moves.length == 0) {
+            alert("You won!");
+            return;
+        }
+
         abChess.play(moves[0][0], moves[0][1]);
         ++moveCount;
         moves.shift();
         fenList.shift();
+        if (fenList.length == 0) {
+            alert("You won!");
+            return;
+        }
         return;
     } else {
         alert("Wrong move! Try again.");
@@ -200,4 +227,5 @@ function nextStep() {
     }
 }
 
+// listens for continuation of game
 abChess.onMovePlayed(nextStep);
