@@ -12,6 +12,7 @@ var movesForHint = [];
 var hasGameStarted = false;
 var fenList = [];
 var playingWhite = true;
+var  pastFen = '';
 // nessesary for getFEN method to work
 var moveCount = 0;
 var computerMove = false
@@ -72,6 +73,7 @@ abChess.setFEN();
 
 // reset pieces on the board
 document.getElementById("newGame").onclick = function newGame() {
+    // set game back to starting state
     abChess.setFEN();
     abChess.reset();
     moves = [];
@@ -81,6 +83,7 @@ document.getElementById("newGame").onclick = function newGame() {
     playingWhite = true;
     computerMove = false;
     movesForHint = [];
+    pastFen = "";
 }
 
 // flip the board
@@ -130,7 +133,7 @@ function setFen(opening) {
                 fen = copyCatFenBlack;
             }
             break;
-        case "viennaGamit":
+        case "viennaGambit":
             if (playingWhite) {
                 fen = viennaGamitFenWhite;
             } else {
@@ -171,7 +174,7 @@ function setMovesForHint(opening) {
                 movesCopy = copyCatMovesBlack;
             }
             break;
-        case "viennaGamit":
+        case "viennaGambit":
             if (playingWhite) {
                 movesCopy = viennaGamitMovesWhite;
             } else {
@@ -213,7 +216,7 @@ function setMoves(opening) {
                 movesCopy = copyCatMovesWhite;
             }
             break;
-        case "viennaGamit":
+        case "viennaGambit":
             if (playingWhite) {
                 movesCopy = viennaGamitMovesBlack;
             } else {
@@ -255,6 +258,9 @@ function nextStep() {
     // check if game has started
     if (!hasGameStarted) { 
         alert("please start the game before moving");
+        // TODO set game back to starting state
+        abChess.setFEN();
+        abChess.reset();
         return;
     }
     // does't need to check move if it's computers turn
@@ -267,6 +273,7 @@ function nextStep() {
     let currentFen = abChess.getFEN(moveCount);
     // check that user made the correct move
     if (currentFen == fenList[0]) {
+        pastFen = currentFen;
         computerMove = true;
         if (moves.length == 0) {
             alert("You won!");
@@ -284,8 +291,10 @@ function nextStep() {
         }
         return;
     } else {
+        //TODO set game back to state of last move
         alert("Wrong move! Try again.");
-        abChess.setFEN(pastFEN);
+        --moveCount;
+        abChess.setFEN(pastFen);
     }
 }
 
