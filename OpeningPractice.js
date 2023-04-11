@@ -74,6 +74,7 @@ abChess.setFEN();
 // reset pieces on the board
 document.getElementById("newGame").onclick = function newGame() {
     // set game back to starting state
+    // setPgn instead() of setFEN() to reset the board
     abChess.setFEN();
     abChess.reset();
     moves = [];
@@ -259,6 +260,7 @@ function nextStep() {
     if (!hasGameStarted) { 
         alert("please start the game before moving");
         // TODO set game back to starting state
+        // setPgn instead() of setFEN() to reset the board
         abChess.setFEN();
         abChess.reset();
         return;
@@ -294,6 +296,8 @@ function nextStep() {
         //TODO set game back to state of last move
         alert("Wrong move! Try again.");
         --moveCount;
+        
+        // setPgn instead() of setFEN() to reset the board
         abChess.setFEN(pastFen);
     }
 }
