@@ -13,6 +13,7 @@ var hasGameStarted = false;
 var fenList = [];
 var playingWhite = true;
 var  pastFen = '';
+var pastPGN = '';
 // nessesary for getFEN method to work
 var moveCount = 0;
 var computerMove = false
@@ -74,7 +75,8 @@ abChess.setFEN();
 // reset pieces on the board
 document.getElementById("newGame").onclick = function newGame() {
     // set game back to starting state
-    // setPgn instead() of setFEN() to reset the board
+    window.location.reload();
+    /*
     abChess.setFEN();
     abChess.reset();
     moves = [];
@@ -85,6 +87,7 @@ document.getElementById("newGame").onclick = function newGame() {
     computerMove = false;
     movesForHint = [];
     pastFen = "";
+    */
 }
 
 // flip the board
@@ -259,10 +262,6 @@ function nextStep() {
     // check if game has started
     if (!hasGameStarted) { 
         alert("please start the game before moving");
-        // TODO set game back to starting state
-        // setPgn instead() of setFEN() to reset the board
-        abChess.setFEN();
-        abChess.reset();
         return;
     }
     // does't need to check move if it's computers turn
@@ -284,6 +283,7 @@ function nextStep() {
 
         abChess.play(moves[0][0], moves[0][1]);
         ++moveCount;
+        pastPGN = abChess.getPGN();
         moves.shift();
         fenList.shift();
         movesForHint.shift();
@@ -298,7 +298,7 @@ function nextStep() {
         --moveCount;
         
         // setPgn instead() of setFEN() to reset the board
-        abChess.setFEN(pastFen);
+        abChess.setPGN(pastPGN);
     }
 }
 
