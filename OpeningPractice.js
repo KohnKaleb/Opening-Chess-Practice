@@ -114,6 +114,7 @@ document.getElementById("start").onclick = function start() {
     if (!playingWhite) {
         computerMove = true;
         abChess.play(moves[0][0], moves[0][1]);
+        playAudio("/sounds/move.mp3");
         ++moveCount;
         moves.shift();
     }
@@ -274,14 +275,17 @@ function nextStep() {
     let currentFen = abChess.getFEN(moveCount);
     // check that user made the correct move
     if (currentFen == fenList[0]) {
+        playAudio("/sounds/move-self.mp3");
         pastFen = currentFen;
         computerMove = true;
         if (moves.length == 0) {
             document.getElementById("successMsg").innerHTML = "<img src='/images/CheckMark.jpg'>" + "You won!";
+            playAudio("/sounds/mixkit-achievement-bell-600.wav");
             return;
         }
 
         abChess.play(moves[0][0], moves[0][1]);
+        playAudio("/sounds/move-self.mp3");
         ++moveCount;
         pastPGN = abChess.getPGN();
         moves.shift();
@@ -289,17 +293,25 @@ function nextStep() {
         movesForHint.shift();
         if (fenList.length == 0) {
             document.getElementById("successMsg").innerHTML = "<img src='/images/CheckMark.jpg'>" + "You won!";
+            playAudio("/sounds/mixkit-achievement-bell-600.wav");
             return;
         }
         return;
     } else {
         //TODO set game back to state of last move
         alert("Wrong move! Try again.");
+        playAudio("/sounds/wronganswer-37702.mp3");
         --moveCount;
         
         // setPgn instead() of setFEN() to reset the board
         abChess.setPGN(pastPGN);
     }
+}
+
+function playAudio(mp3File) {
+    var audio = document.createElement('audio');
+    audio.src = mp3File;
+    audio.play();
 }
 
 // listens for continuation of game
