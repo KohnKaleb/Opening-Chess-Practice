@@ -277,7 +277,7 @@ function nextStep() {
         pastFen = currentFen;
         computerMove = true;
         if (moves.length == 0) {
-            alert("You won!");
+            document.getElementById("successMsg").innerHTML = "<img src='/images/CheckMark.jpg'>" + "You won!";
             return;
         }
 
@@ -288,7 +288,7 @@ function nextStep() {
         fenList.shift();
         movesForHint.shift();
         if (fenList.length == 0) {
-            alert("You won!");
+            document.getElementById("successMsg").innerHTML = "<img src='/images/CheckMark.jpg'>" + "You won!";
             return;
         }
         return;
