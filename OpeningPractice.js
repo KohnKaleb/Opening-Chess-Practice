@@ -15,6 +15,7 @@ var playingWhite = true;
 var  pastFen = '';
 var pastPGN = '';
 var modal = document.getElementById("wrongGuessModal");
+var noOpeningModal = document.getElementById("noOpeningModal");
 // nessesary for getFEN method to work
 var moveCount = 0;
 var computerMove = false
@@ -87,9 +88,15 @@ document.getElementById("flipBoard").onclick = function flipBoard() {
     computerMove = !computerMove;
 }
 
-// close the modal
+// close the wrong guess modal
 document.getElementById("tryAgain").onclick = function close() {
     modal.style.display = "none";
+    window.location.reload();
+}
+
+// close the no opening modal
+document.getElementById("ok").onclick = function ok() {
+    noOpeningModal.style.display = "none";
     window.location.reload();
 }
 
@@ -257,8 +264,8 @@ function checkFEN(fenList) {
  */
 function nextStep() {
     // check if game has started
-    if (!hasGameStarted) { 
-        alert("please start the game before moving");
+    if (!hasGameStarted) {
+        noOpeningModal.style.display = "block";
         return;
     }
     // does't need to check move if it's computers turn
