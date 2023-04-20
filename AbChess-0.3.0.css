@@ -9,6 +9,7 @@
     display: inline-block;
     border: 1px solid saddlebrown;
     vertical-align: top;
+    left: 431.667px;
 }
 
 .square_black, .square_white {
@@ -92,7 +93,7 @@
 
 .columns-border__fragment {
     display: inline-block;
-    width: 12.5%;
+    width: 50px;
     vertical-align: top;
 }
 
