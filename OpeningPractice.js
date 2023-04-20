@@ -14,9 +14,11 @@ var fenList = [];
 var playingWhite = true;
 var  pastFen = '';
 var pastPGN = '';
+var modal = document.getElementById("wrongGuessModal");
 // nessesary for getFEN method to work
 var moveCount = 0;
 var computerMove = false
+
 
 // fen to check if user correctly played next move
 var copyCatFenWhite = ['rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1',
@@ -83,6 +85,12 @@ document.getElementById("flipBoard").onclick = function flipBoard() {
     abChess.flip();
     playingWhite = !playingWhite;
     computerMove = !computerMove;
+}
+
+// close the modal
+document.getElementById("tryAgain").onclick = function close() {
+    modal.style.display = "none";
+    window.location.reload();
 }
 
 // start the game
@@ -287,7 +295,7 @@ function nextStep() {
         return;
     } else {
         //TODO set game back to state of last move
-        alert("Wrong move! Try again.");
+        modal.style.display = "block";
         playAudio("/sounds/wronganswer-37702.mp3");
         --moveCount;
         
