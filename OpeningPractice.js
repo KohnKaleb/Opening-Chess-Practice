@@ -148,14 +148,14 @@ function setFen(opening) {
                 fen = viennaGamitFenBlack;
             }
             break;
-        case "advanceCaroKann":
+        case "advanceVariation":
             if (playingWhite) {
                 fen = advanceCaroKannFenWhite;
             } else {
                 fen = advanceCaroKannFenBlack;
             }
             break;
-        case "exchangeCaroKann":
+        case "exchangeVariation":
             if (playingWhite) {
                 fen = exchangeCaroKannFenWhite;
             } else {
@@ -189,14 +189,14 @@ function setMovesForHint(opening) {
                 movesCopy = viennaGamitMovesBlack;
             }
             break;
-        case "advanceCaroKann":
+        case "advanceVariation":
             if (playingWhite) {
                 movesCopy = advanceCaroKannMovesWhite;
             } else {
                 movesCopy = advanceCaroKannMovesBlack;
             }
             break;
-        case "exchangeCaroKann":
+        case "exchangeVariation":
             if (playingWhite) {
                 movesCopy = exchangeCaroKannMovesWhite;
             } else {
@@ -231,14 +231,14 @@ function setMoves(opening) {
                 movesCopy = viennaGamitMovesWhite;
             }
             break;
-        case "advanceCaroKann":
+        case "advanceVariation":
             if (playingWhite) {
                 movesCopy = advanceCaroKannMovesBlack;
             } else {
                 movesCopy = advanceCaroKannMovesWhite;
             }
             break;
-        case "exchangeCaroKann":
+        case "exchangeVariation":
             if (playingWhite) {
                 movesCopy = exchangeCaroKannMovesBlack;
             } else {
