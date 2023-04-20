@@ -76,18 +76,6 @@ abChess.setFEN();
 document.getElementById("newGame").onclick = function newGame() {
     // set game back to starting state
     window.location.reload();
-    /*
-    abChess.setFEN();
-    abChess.reset();
-    moves = [];
-    fenList = [];
-    moveCount = 0;
-    hasGameStarted = false;
-    playingWhite = true;
-    computerMove = false;
-    movesForHint = [];
-    pastFen = "";
-    */
 }
 
 // flip the board
