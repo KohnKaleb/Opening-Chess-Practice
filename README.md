@@ -8,6 +8,6 @@ This project is created using plain JS, HTML, and CSS and using the ABChess API 
 Currently running locally on VS Code live server
 
 **TODO**
-- Change state back to state of last move when user guesses an incorrect sequence
-- Change game to starting state when user plays a move without choosing an opening
-- Stying of page to make look good
+- [x] Change state back to state of last move when user guesses an incorrect sequence
+- [x] Change game to starting state when user plays a move without choosing an opening
+- [x] Stying of page to make look good
