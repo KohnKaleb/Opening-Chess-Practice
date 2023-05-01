@@ -283,6 +283,10 @@ function nextStep() {
         computerMove = true;
         if (moves.length == 0) {
             document.getElementById("successMsg").innerHTML = "<img src='/images/CheckMark.jpg'>" + "You won!";
+            document.getElemenyById("successMsg").style.margin = 0;
+            document.getElemenyById("successMsg").style.position = "absolute";
+            document.getElemenyById("successMsg").style.top = "50%";
+            document.getElemenyById("successMsg").style.transform = "translateY(-50%)";
             playAudio("/sounds/mixkit-achievement-bell-600.wav");
             return;
         }
