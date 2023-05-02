@@ -9,6 +9,7 @@
     display: inline-block;
     border: 1px solid saddlebrown;
     vertical-align: top;
+    top: 50px;
     left: 431.667px;
 }
 
@@ -101,6 +102,7 @@
     display: inline-block;
     vertical-align: top;
     width: 20px;
+    margin-top: 50px;
     text-align: center;
     font-size: 90%;
     color: grey;
